@@ -33,6 +33,8 @@ pygame.display.set_caption(GAME_TITLE)
 screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 
+pygame.mixer.music.load("Resources/Sounds/backgroundMusic.mp3")
+pygame.mixer.music.play(-1,0.0)
 
 ## ---------------------------------------- FUNCTIONS ----------------------------------------
 
@@ -43,8 +45,7 @@ def changeSceneTo(i,shiftDown,shiftRight):
     #currentScene = SCENES[i]["name"]       #for some reason can't get this to work
     screen.fill(COLOR_BLACK)
     screen.blit(SCENES[i]["img"],(0+shiftDown,0+shiftRight))
-    #print(SCENES[i]["sound"])
-
+    
 ## Setting Up Pygame to Display Text, Creating My Own Function to Display Lines (And Make Speech Bubble)
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS',30)
@@ -230,11 +231,11 @@ def fightBoss(skill):
     print(str(board[6])+"|"+str(board[7])+"|"+str(board[8]))
     print("     ")
 
-    displayMessage(1,str(board[0])+"|"+str(board[1])+"|"+str(board[2]))
-    displayMessage(2,"-----")
-    displayMessage(3,str(board[3])+"|"+str(board[4])+"|"+str(board[5]))
-    displayMessage(4,"-----")
-    displayMessage(5,str(board[6])+"|"+str(board[7])+"|"+str(board[8]))
+    displayMessage(1,"                                                  "+str(board[0])+" | "+str(board[1])+" | "+str(board[2]))
+    displayMessage(2,"                                                  "+"----------")
+    displayMessage(3,"                                                  "+str(board[3])+" | "+str(board[4])+" | "+str(board[5]))
+    displayMessage(4,"                                                  "+"----------")
+    displayMessage(5,"                                                  "+str(board[6])+" | "+str(board[7])+" | "+str(board[8]))
     pygame.display.update()
     clock.tick(60)
 
@@ -285,18 +286,18 @@ def fightBoss(skill):
                 board[playerMove] = 1
 
                 #Print Board to Console for Lols.
-                print(str(board[0])+"|"+str(board[1])+"|"+str(board[2]))
-                print("-----")
-                print(str(board[3])+"|"+str(board[4])+"|"+str(board[5]))
-                print("-----")
-                print(str(board[6])+"|"+str(board[7])+"|"+str(board[8]))
+                print(str(board[0])+" | "+str(board[1])+" | "+str(board[2]))
+                print("--------")
+                print(str(board[3])+" | "+str(board[4])+" | "+str(board[5]))
+                print("--------")
+                print(str(board[6])+" | "+str(board[7])+" | "+str(board[8]))
                 print("     ")
 
-                displayMessage(1,str(board[0])+"|"+str(board[1])+"|"+str(board[2]))
-                displayMessage(2,"-----")
-                displayMessage(3,str(board[3])+"|"+str(board[4])+"|"+str(board[5]))
-                displayMessage(4,"-----")
-                displayMessage(5,str(board[6])+"|"+str(board[7])+"|"+str(board[8]))
+                displayMessage(1,"                                                  "+str(board[0])+" | "+str(board[1])+" | "+str(board[2]))
+                displayMessage(2,"                                                  "+"----------")
+                displayMessage(3,"                                                  "+str(board[3])+" | "+str(board[4])+" | "+str(board[5]))
+                displayMessage(4,"                                                  "+"----------")
+                displayMessage(5,"                                                  "+str(board[6])+" | "+str(board[7])+" | "+str(board[8]))
                 pygame.display.update()
                 clock.tick(60)
 
@@ -364,18 +365,18 @@ def fightBoss(skill):
             if board[bossMove]==0:
                 board[bossMove] = 2
                 
-                print(str(board[0])+"|"+str(board[1])+"|"+str(board[2]))
-                print("-----")
-                print(str(board[3])+"|"+str(board[4])+"|"+str(board[5]))
-                print("-----")
-                print(str(board[6])+"|"+str(board[7])+"|"+str(board[8]))
+                print(str(board[0])+" | "+str(board[1])+" | "+str(board[2]))
+                print("-------")
+                print(str(board[3])+" | "+str(board[4])+" | "+str(board[5]))
+                print("-------")
+                print(str(board[6])+" | "+str(board[7])+" | "+str(board[8]))
                 print("     ")
 
-                displayMessage(1,str(board[0])+"|"+str(board[1])+"|"+str(board[2]))
-                displayMessage(2,"-----")
-                displayMessage(3,str(board[3])+"|"+str(board[4])+"|"+str(board[5]))
-                displayMessage(4,"-----")
-                displayMessage(5,str(board[6])+"|"+str(board[7])+"|"+str(board[8]))
+                displayMessage(1,"                                                  "+str(board[0])+" | "+str(board[1])+" | "+str(board[2]))
+                displayMessage(2,"                                                  "+"----------")
+                displayMessage(3,"                                                  "+str(board[3])+" | "+str(board[4])+" | "+str(board[5]))
+                displayMessage(4,"                                                  "+"----------")
+                displayMessage(5,"                                                  "+str(board[6])+" | "+str(board[7])+" | "+str(board[8]))
                 pygame.display.update()
                 clock.tick(60)
 
@@ -404,17 +405,21 @@ def fightBoss(skill):
         changeSceneTo(0,0,0)
         displayMessage(1,"You Win!")
         displayMessage(2,"LSU Prevails!")
+        displayMessage(7,"...press 'r' to restart..")
         pygame.display.update()
         clock.tick(60)
+        currentScene="gameDone"
+        print(currentScene)
         
-        #currentScene = "gameWinScene"
     elif isOver()=="boss":
         changeSceneTo(0,0,0)
         displayMessage(1,"You Lose!")
         displayMessage(2,"Today is one of the worst days in history...")
+        displayMessage(7,"...press 'r' to restart...")
         pygame.display.update()
         clock.tick(60)
-        #currentScene = "gameLoseScene"
+        currentScene="gameDone"
+        print(currentScene)
 
 
 ## ---------------------------------------- MAIN ----------------------------------------
@@ -883,13 +888,22 @@ def main():
             displayMessage(2,"I'll have to escape and fight back...")
             displayMessage(7,"...space to continue...")
 
-        # ---- Game Win ----
-        elif currentScene ==  "gameWin":
-            displayMessage(1,"You won!")
+        # ---- Game Win, Then Repeat ----
+        elif currentScene ==  "gameDone" and decision == "choice_space":
+            currentScene = SCENES[0]["name"]
+            changeSceneTo(0,0,0)
 
-        # ---- Game Loss ----
-        elif currentScene == "gameLoss":
-            displayMessage(1,"You Loss!")
+            currentScene = "menuScene"
+            screen.fill(COLOR_BLACK)
+            screen.blit(menuImage,(0,0))
+            displayMessage(1,"Welcome to Tiger-stellar, the ride where you decide!")
+            displayMessage(2,"Click <SPACE> to progress to the next scene.")
+            displayMessage(3,"When presented with a choice, click 1 or 2 to decide.")
+            displayMessage(4,"Good luck!")
+            displayMessage(7,"...space to continue...")
+
+            skill="null"
+
 
         ## Updating Screen
         pygame.display.update()
