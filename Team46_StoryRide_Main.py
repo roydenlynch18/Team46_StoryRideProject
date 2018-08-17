@@ -220,6 +220,9 @@ def fightBoss(skill):
         if board[6]==2 and board[4]==2 and board[2]==2:
             winner="boss"
             return winner
+        if board[0]!=0 and board[1]!=0 and board[2]!=0 and board[3]!=0 and board[4]!=0 and board[5]!=0 and board[6]!=0 and board[7]!=0 and board[8]!=0:
+            winner="tie"
+            return winner
         else:
             return "false"
 
@@ -324,6 +327,11 @@ def fightBoss(skill):
                     winCondition=True
                     break
 
+                elif isOver()=="tie":
+                    print(isOver())
+                    winCondition=True
+                    break
+
             #Notify If Incorrent Move
             elif board[playerMove] == 1 or 2:
                 print("Someone has already moved there.")
@@ -393,6 +401,11 @@ def fightBoss(skill):
                     print(isOver())
                     winCondition=True
                     break
+
+                elif isOver()=="tie":
+                    print(isOver())
+                    winCondition=True
+                    break
                 
             elif board[bossMove] == 1 or 2:
                 print("Someone has already moved there.")
@@ -420,6 +433,15 @@ def fightBoss(skill):
         clock.tick(60)
         currentScene="gameDone"
         print(currentScene)
+
+    elif isOver()=="tie":
+        changeSceneTo(0,0,0)
+        displayMessage(1,"It's a tie...")
+        displayMessage(2,"Maybe you'll fight another day...")
+        displayMessage(7,"...press 'r' to restart...")
+        pygame.display.update()
+        clock.tick(60)
+        currentScene="gameDone"
 
 
 ## ---------------------------------------- MAIN ----------------------------------------
@@ -869,13 +891,18 @@ def main():
                 x=5
                 currentScene = SCENES[x]["name"]
                 changeSceneTo(x,0,0)
+##                displayMessage(1,"Oh no! The security ships captured us!")
+##                displayMessage(2,"It looks like we're trapped in some sort of cell.")
+##                displayMessage(3,"Alright, looks like there's a door and code.")
+##                displayMessage(4,"It wants me to guess if the number is below 50 or over 50??")
+##                displayMessage(5,"DECISION! Do you want to ...")
+##                displayMessage(6,"1. Pick Below 50")
+##                displayMessage(7,"2. Pick Above 50")
                 displayMessage(1,"Oh no! The security ships captured us!")
                 displayMessage(2,"It looks like we're trapped in some sort of cell.")
-                displayMessage(3,"Alright, looks like there's a door and code.")
-                displayMessage(4,"It wants me to guess if the number is below 50 or over 50??")
                 displayMessage(5,"DECISION! Do you want to ...")
-                displayMessage(6,"1. Pick Below 50")
-                displayMessage(7,"2. Pick Above 50")
+                displayMessage(6,"1. Try to escape now.")
+                displayMessage(7,"2. Wait for a better opportunity to arise.")
                 
 
         ## ---- Reporting ----
